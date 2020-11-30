@@ -1,0 +1,72 @@
+{
+  "version": "0.1.0-alpha.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "core-js": ">=3.0.0",
+    "html-webpack-plugin": ">=5.0.0-alpha.17",
+    "regenerator-runtime": "^0.13.7",
+    "webpack": ">=5.0.0",
+    "whatwg-fetch": "^3.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "all"
+  },
+  "name": "webpack-differential-polyfill-plugin",
+  "author": "rob",
+  "module": "dist/webpack-differential-polyfill-plugin.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/webpack-differential-polyfill-plugin.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/webpack-differential-polyfill-plugin.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.7.0",
+    "@types/babel__core": "^7.1.12",
+    "@types/babel__preset-env": "^7.9.1",
+    "@types/core-js": "2.5.4",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^5.0.0-alpha.14",
+    "husky": "^4.3.0",
+    "size-limit": "^4.7.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.5",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1"
+  }
+}
