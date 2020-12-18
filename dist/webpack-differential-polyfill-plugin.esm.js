@@ -870,14 +870,17 @@ var DifferentialPolyfillPlugin = /*#__PURE__*/function () {
         _this$options$defer = _this$options.defer,
         defer = _this$options$defer === void 0 ? true : _this$options$defer;
     compiler.hooks.compilation.tap("DifferentialPolyfillPlugin", function (compilation) {
+      var _compilation$options$;
+
       var _HtmlWebpackPlugin$ge = HtmlWebpackPlugin.getHooks(compilation),
           alterAssetTags = _HtmlWebpackPlugin$ge.alterAssetTags;
 
+      var pathPrefix = (_compilation$options$ = compilation.options.output.publicPath) != null ? _compilation$options$ : "/";
       alterAssetTags.tap(webpackTapOptions, function (tags) {
         tags.assetTags.scripts = [{
           attributes: {
             nomodule: true,
-            src: nomoduleName,
+            src: "" + pathPrefix + nomoduleName,
             defer: defer
           },
           tagName: "script",
@@ -885,14 +888,21 @@ var DifferentialPolyfillPlugin = /*#__PURE__*/function () {
         }, {
           attributes: {
             type: "module",
-            src: moduleName,
+            src: "" + pathPrefix + moduleName,
             defer: defer
           },
           tagName: "script",
           voidTag: false
         }].concat(tags.assetTags.scripts.filter(function (script) {
-          if (typeof script.attributes.src === "boolean") return true;
-          return !script.attributes.src.includes(nomoduleName) && script.attributes.src.includes(moduleName);
+          if (typeof script.attributes.src === "boolean") {
+            return true;
+          }
+
+          if (script.attributes.src.includes(nomoduleName) || script.attributes.src.includes(moduleName)) {
+            return false;
+          }
+
+          return true;
         }));
         return tags;
       });

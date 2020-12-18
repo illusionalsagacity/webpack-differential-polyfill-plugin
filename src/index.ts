@@ -78,23 +78,30 @@ export class DifferentialPolyfillPlugin {
 
     compiler.hooks.compilation.tap("DifferentialPolyfillPlugin", compilation => {
       const { alterAssetTags } = HtmlWebpackPlugin.getHooks(compilation);
+      const pathPrefix = compilation.options.output.publicPath ?? "/";
 
       alterAssetTags.tap(webpackTapOptions, tags => {
         tags.assetTags.scripts = [
           {
-            attributes: { nomodule: true, src: nomoduleName, defer },
+            attributes: { nomodule: true, src: `${pathPrefix}${nomoduleName}`, defer },
             tagName: "script",
             voidTag: false,
           },
           {
-            attributes: { type: "module", src: moduleName, defer },
+            attributes: { type: "module", src: `${pathPrefix}${moduleName}`, defer },
             tagName: "script",
             voidTag: false,
           },
           ...tags.assetTags.scripts.filter(script => {
-            if (typeof script.attributes.src === "boolean") return true;
+            if (typeof script.attributes.src === "boolean") {
+              return true;
+            }
 
-            return !script.attributes.src.includes(nomoduleName) && script.attributes.src.includes(moduleName);
+            if (script.attributes.src.includes(nomoduleName) || script.attributes.src.includes(moduleName)) {
+              return false;
+            }
+
+            return true;
           }),
         ];
         return tags;
