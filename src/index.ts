@@ -91,7 +91,11 @@ export class DifferentialPolyfillPlugin {
             tagName: "script",
             voidTag: false,
           },
-          ...tags.assetTags.scripts,
+          ...tags.assetTags.scripts.filter(script => {
+            if (typeof script.attributes.src === "boolean") return true;
+
+            return !script.attributes.src.includes(nomoduleName) && script.attributes.src.includes(moduleName);
+          }),
         ];
         return tags;
       });

@@ -896,7 +896,10 @@ var DifferentialPolyfillPlugin = /*#__PURE__*/function () {
           },
           tagName: "script",
           voidTag: false
-        }].concat(tags.assetTags.scripts);
+        }].concat(tags.assetTags.scripts.filter(function (script) {
+          if (typeof script.attributes.src === "boolean") return true;
+          return !script.attributes.src.includes(nomoduleName) && script.attributes.src.includes(moduleName);
+        }));
         return tags;
       });
       compilation.hooks.processAssets.tapPromise(webpackTapOptions, /*#__PURE__*/function () {
