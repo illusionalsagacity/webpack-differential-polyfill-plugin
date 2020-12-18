@@ -100,6 +100,7 @@ export class DifferentialPolyfillPlugin {
         try {
           if (!Object.prototype.hasOwnProperty.call(sources, moduleName)) {
             const modulePolyfill = await babel.transformAsync(POLYFILL_FILE_CONTENTS, {
+              filename: this.options.filename.module,
               presets: [MODERN_BABEL_ENV_PRESET],
             });
             if (modulePolyfill?.code != null) {
@@ -115,6 +116,7 @@ export class DifferentialPolyfillPlugin {
         if (!Object.prototype.hasOwnProperty.call(sources, nomoduleName)) {
           try {
             const nomodulePolyfill = await babel.transformAsync(POLYFILL_FILE_CONTENTS, {
+              filename: this.options.filename.nomodule,
               presets: [LEGACY_BABEL_ENV_PRESET],
             });
             if (nomodulePolyfill?.code != null) {
